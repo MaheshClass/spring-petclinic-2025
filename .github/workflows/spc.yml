@@ -1,9 +1,6 @@
 ---
 name: buiding the spring petclinic project
-on: 
-    pull_request:
-        branches:
-            - main
+on: push
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -17,3 +14,8 @@ jobs:
                 java-version: '21'
             - name: "build the package"
               run: mvn package
+            - name: Upload artifact for deployment job
+              uses: actions/upload-artifact@v3
+              with:
+                name: java-app
+                path: target/*.jar
