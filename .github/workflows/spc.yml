@@ -40,4 +40,5 @@ jobs:
                 password: ${{ secrets.PASSWORD }}
             - name: Build Docker Image
               run: docker build -t ${{ secrets.USERNAME }}/myapp:${{ github.sha }} .
+              working-directory: Dockerfile
             
