@@ -4,6 +4,9 @@ on: push
 jobs:
     build:
         runs-on: ubuntu-latest
+        permissions:
+          security-events: write
+          actions: read
         steps:
             - name: "checkout the code"
               uses: actions/checkout@v5
@@ -12,6 +15,10 @@ jobs:
               with:
                 distribution: 'temurin'
                 java-version: '21'
+            - name: Initialize CodeQL
+              uses: github/codeql-action/init@v3
+              with:
+                languages: java
             - name: "build the java package"
               run: mvn package
             - name: Upload artifact for deployment job
@@ -24,4 +31,6 @@ jobs:
               with:
                 name: junit-results
                 path: target/surefire-reports/*.xml
+            - name: Perform CodeQL Analysis
+              uses: github/codeql-action/analyze@v3
             
