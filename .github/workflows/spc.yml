@@ -39,7 +39,7 @@ jobs:
                 username: ${{ secrets.USERNAME }}
                 password: ${{ secrets.PASSWORD }}
             - name: Build Docker Image
-              run: docker build -f Dockefile -t ${{ secrets.USERNAME }}/myapp:${{ github.sha }} .
-              working-directory: spring-petclinic-2025
+              run: docker build -f .spring-petclinic-2025/Dockefile -t ${{ secrets.USERNAME }}/myapp:${{ github.sha }} .
+              
 
             
