@@ -42,4 +42,15 @@ jobs:
               run: docker build -f Image/Dockerfile -t ${{ secrets.USERNAME }}/myapp:v1 .
             - name: Docker Push Image
               run: docker push ${{ secrets.USERNAME }}/myapp:v1
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v2
+
+            - name: Terraform Format
+              run: terraform fmt -check
+              working-directory: ./infrastructure
+
+            - name: Terraform Init
+              run: terraform init
+              working-directory: ./infrastructure
           
