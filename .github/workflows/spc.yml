@@ -19,18 +19,18 @@ jobs:
               uses: github/codeql-action/init@v3
               with:
                 languages: java
-            - name: "build the java package"
-              run: mvn package
-            - name: Upload artifact for deployment job
-              uses: actions/upload-artifact@v4
-              with:
-                name: java-app
-                path: target/*.jar
-            - name: Upload JUnit Test Results
-              uses: actions/upload-artifact@v4
-              with:
-                name: junit-results
-                path: target/surefire-reports/*.xml
+            # - name: "build the java package"
+            #   run: mvn package
+            # - name: Upload artifact for deployment job
+            #   uses: actions/upload-artifact@v4
+            #   with:
+            #     name: java-app
+            #     path: target/*.jar
+            # - name: Upload JUnit Test Results
+            #   uses: actions/upload-artifact@v4
+            #   with:
+            #     name: junit-results
+            #     path: target/surefire-reports/*.xml
             # - name: Perform CodeQL Analysis
             #   uses: github/codeql-action/analyze@v3
             # - name: Log in to Docker Hub
@@ -52,5 +52,9 @@ jobs:
 
             - name: Terraform Init
               run: terraform init
+              working-directory: ./infrastructure
+
+            - name: Terraform plan
+              run: terraform plan
               working-directory: ./infrastructure
           
