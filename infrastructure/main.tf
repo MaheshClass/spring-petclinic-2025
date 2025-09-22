@@ -1,30 +1,37 @@
-module "eks" {
-  source          = "terraform-aws-modules/eks/aws"
-  version         = "~> 20.31"
-  cluster_name    = "demo-eks-cluster"
-  cluster_version = "1.31"
 
-  cluster_endpoint_public_access            = true
-  enable_cluster_creator_admin_permissions  = true
+# Create EKS Cluster
+resource "aws_eks_cluster" "example" {
+  name     = "example-eks-cluster"
+  role_arn = aws_iam_role.eks_cluster.arn
 
-
-  vpc_id     = "aws_vpc.eks_vpc.id"
-  subnet_ids = ["aws_subnet.public_subnet_1.id", "aws_subnet.public_subnet_2.id", "aws_subnet.private_subnet_1.id", "aws_subnet.private_subnet_2.id"]
-
-  eks_managed_node_groups = {
-    example = {
-      instance_types = ["t3.medium"]
-      min_size       = 1
-      max_size       = 3
-      desired_size   = 2
-      tags = {
-        Environment = "dev"
-        Terraform   = "true"
-      }
-    }
+  vpc_config {
+    subnet_ids              = [aws_subnet.public_1.id, aws_subnet.public_2.id]
+    endpoint_public_access  = true
+    endpoint_private_access = false
   }
-  tags = {
-    Environment = "dev"
-    Terraform   = "true"
-  }
+
+  version = "1.32"
 }
+
+
+# EKS Node Group
+resource "aws_eks_node_group" "example" {
+  cluster_name    = aws_eks_cluster.example.name
+  node_group_name = "example-node-group"
+  node_role_arn   = aws_iam_role.eks_node_group.arn
+  subnet_ids      = [aws_subnet.public_1.id, aws_subnet.public_2.id]
+
+  scaling_config {
+    desired_size = 2
+    max_size     = 2
+    min_size     = 2
+  }
+
+  remote_access {
+    ec2_ssh_key = "Agent_login"
+  }
+
+  ami_type       = "AL2_x86_64"
+  instance_types = ["t3.medium"]
+}
+
