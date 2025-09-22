@@ -58,7 +58,7 @@ jobs:
               working-directory: ./infrastructure
 
             - name: Terraform Apply
-              run: terraform apply -auto-approve
+              run: terraform destroy -auto-approve
               working-directory: ./infrastructure
 
             - name: Install  kubectl
