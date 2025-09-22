@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: myapp-container
-    image: qualitygroup/myapp:latest
+    image: qualitygroup/myapp:v1
     ports:
      - containerPort: 8080
     command: ["java", "-jar", "/app.jar"]  # Adjust jar path if needed
